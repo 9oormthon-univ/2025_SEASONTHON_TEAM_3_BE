@@ -1,0 +1,33 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # ?? ??? (?? ?? ??)
+    url: jdbc:mysql://localhost:3306/${MYSQL_DATABASE}?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    # ?? ???
+    #url: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+# JWT 설정
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  auth-type: Bearer
+  authorities-key: auth
+  access-token-header: Authorization
+  refresh-token-header: RefreshToken
+  access-token-expire: 86400000  # 24시간 (밀리초)
+  refresh-token-expire: 604800000  # 7일 (밀리초)
+
+springdoc:
+  swagger-ui:
+    enabled: true
