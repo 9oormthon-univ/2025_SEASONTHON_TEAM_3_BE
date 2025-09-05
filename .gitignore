@@ -36,3 +36,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Google Cloud Service Account Key
+service-account-key.json
+.env
