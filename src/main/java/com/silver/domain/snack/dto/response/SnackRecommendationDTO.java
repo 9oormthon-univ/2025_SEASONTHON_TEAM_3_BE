@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class SnackRecommendationDTO {
+    private Long id;
     private String name;
     private String reason;
     private String category;

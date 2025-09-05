@@ -71,23 +71,27 @@ public class RecommendationService {
 
     private String createFinalRecommendationPrompt(SnackRequestDTO dto, List<Snack> candidateSnacks) {
         String snackListString = candidateSnacks.stream()
-                .map(snack -> String.format("- 제품명: %s, 카테고리: %s, 소분류: %s, 제조사: %s, 총당류: %.2fg, 나트륨: %.2fmg",
-                        snack.getName(), snack.getCategory(), snack.getSubCategory(), snack.getManufacturer(), snack.getSugarG(), snack.getSodiumMg()))
+                .map(snack -> String.format(
+                        "- ID: %d, 제품명: %s, 카테고리: %s, 소분류: %s, 제조사: %s, 총당류: %.2fg, 나트륨: %.2fmg",
+                        snack.getId(), snack.getName(), snack.getCategory(), snack.getSubCategory(),
+                        snack.getManufacturer(), snack.getSugarG(), snack.getSodiumMg()))
                 .collect(Collectors.joining("\n"));
 
         StringBuilder rulesBuilder = new StringBuilder();
         if (dto.getHealthConcerns() != null && !dto.getHealthConcerns().isEmpty()) {
-            if (dto.getHealthConcerns().contains("혈당 관리")) rulesBuilder.append("\n- 혈당 관리를 위해 '총당류(sugarG)'가 낮은 제품을 우선적으로 고려해야 합니다.");
-            if (dto.getHealthConcerns().contains("혈압 관리")) rulesBuilder.append("\n- 혈압 관리를 위해 '나트륨(sodiumMg)' 함량이 낮은 제품을 우선적으로 고려해야 합니다.");
+            if (dto.getHealthConcerns().contains("혈당 관리"))
+                rulesBuilder.append("\n- 혈당 관리를 위해 '총당류(sugarG)'가 낮은 제품을 우선적으로 고려해야 합니다.");
+            if (dto.getHealthConcerns().contains("혈압 관리"))
+                rulesBuilder.append("\n- 혈압 관리를 위해 '나트륨(sodiumMg)' 함량이 낮은 제품을 우선적으로 고려해야 합니다.");
         }
-        rulesBuilder.append("\n- 반드시 완제품 형태의 제품만 추천해야 하며, '밀가루'와 같은 재료 자체를 추천해서는 안 됩니다.");
-        rulesBuilder.append("\n- JSON 응답의 'subCategory' 필드에는 제품의 소분류명을 기입합니다. 만약 제품의 소분류가 없거나 '해당없음'인 경우, 'category' 값을 대신 기입해야 합니다.");
         if (dto.getAllergies() != null && !dto.getAllergies().isEmpty()) {
             rulesBuilder.append("\n- 사용자가 알레르기가 있는 성분(")
                     .append(String.join(", ", dto.getAllergies()))
                     .append(")이 함유된 제품은 절대로 추천해서는 안 됩니다.");
         }
-
+        rulesBuilder.append("\n- 반드시 완제품 형태의 제품만 추천해야 하며, '밀가루'와 같은 재료 자체를 추천해서는 안 됩니다.");
+        rulesBuilder.append("\n- JSON 응답의 'subCategory' 필드에는 제품의 소분류명을 기입합니다. 만약 제품의 소분류가 없거나 '해당없음'인 경우, 'category' 값을 대신 기입해야 합니다.");
+        rulesBuilder.append("\n- 각 추천 항목에는 반드시 위 '추천 가능한 전체 제품 목록'에 표시된 정수형 ID를 그대로 포함해야 합니다.");
 
         return "당신은 주어진 제품 목록 내에서 사용자의 요구사항에 가장 적합한 제품을 추천하는 최고의 영양사입니다." +
                 "\n\n### 사용자 정보 및 요청사항" +
@@ -102,12 +106,13 @@ public class RecommendationService {
                 "\n\n위 사용자 정보와 규칙을 모두 고려하여, '추천 가능한 전체 제품 목록' 안에서만 간식을 총 8개 추천해주세요. 각 카테고리마다 반드시 2개씩 추천해야 합니다. 다른 설명은 일절 포함하지 말고 아래 JSON 배열 형식으로만 응답해주세요." +
                 "\n[" +
                 "\n  {" +
+                "\n    \"id\": 123," + // ★ 예시: 정수형 ID
                 "\n    \"name\": \"추천 제품명\"," +
                 "\n    \"reason\": \"사용자의 모든 정보와 제품의 영양성분을 종합적으로 고려하여 추천하는 이유를 구체적으로 작성\"," +
                 "\n    \"category\": \"간식 대분류명\"," +
                 "\n    \"subCategory\": \"간식 소분류명\"," +
                 "\n    \"manufacturer\": \"제품 제조사명\"," +
-                "\n    \"allergyInfo\": \"제품에 포함된 주요 알레르기 유발 물질 (DB에 정보가 앖으니 영양성분, 이름 등을 보고 판단해야 함)\"" +
+                "\n    \"allergyInfo\": \"제품에 포함된 주요 알레르기 유발 물질 (DB에 정보가 없으니 영양성분, 이름 등을 보고 판단)\"" +
                 "\n  }" +
                 "\n]";
     }
