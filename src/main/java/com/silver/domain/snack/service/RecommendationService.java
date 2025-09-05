@@ -82,6 +82,11 @@ public class RecommendationService {
         }
         rulesBuilder.append("\n- 반드시 완제품 형태의 제품만 추천해야 하며, '밀가루'와 같은 재료 자체를 추천해서는 안 됩니다.");
         rulesBuilder.append("\n- JSON 응답의 'subCategory' 필드에는 제품의 소분류명을 기입합니다. 만약 제품의 소분류가 없거나 '해당없음'인 경우, 'category' 값을 대신 기입해야 합니다.");
+        if (dto.getAllergies() != null && !dto.getAllergies().isEmpty()) {
+            rulesBuilder.append("\n- 사용자가 알레르기가 있는 성분(")
+                    .append(String.join(", ", dto.getAllergies()))
+                    .append(")이 함유된 제품은 절대로 추천해서는 안 됩니다.");
+        }
 
 
         return "당신은 주어진 제품 목록 내에서 사용자의 요구사항에 가장 적합한 제품을 추천하는 최고의 영양사입니다." +
@@ -102,7 +107,7 @@ public class RecommendationService {
                 "\n    \"category\": \"간식 대분류명\"," +
                 "\n    \"subCategory\": \"간식 소분류명\"," +
                 "\n    \"manufacturer\": \"제품 제조사명\"," +
-                "\n    \"allergyInfo\": \"제품에 포함된 주요 알레르기 유발 물질 (DB에 정보가 있다면 그걸 사용)\"" +
+                "\n    \"allergyInfo\": \"제품에 포함된 주요 알레르기 유발 물질 (DB에 정보가 앖으니 영양성분, 이름 등을 보고 판단해야 함)\"" +
                 "\n  }" +
                 "\n]";
     }
