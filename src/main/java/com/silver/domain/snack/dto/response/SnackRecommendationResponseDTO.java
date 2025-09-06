@@ -14,5 +14,4 @@ import java.util.Set;
 @AllArgsConstructor
 public class SnackRecommendationResponseDTO {
     private List<SnackRecommendationDTO> recommendations;
-    private Set<String> subCategories;
 }

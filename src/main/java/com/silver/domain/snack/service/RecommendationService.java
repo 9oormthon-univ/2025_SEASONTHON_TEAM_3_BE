@@ -31,11 +31,7 @@ public class RecommendationService {
         List<Snack> candidateSnacks = snackRepository.findByCategoryIn(recommendedCategories);
         List<SnackRecommendationDTO> recommendations = getFinalRecommendations(requestDto, candidateSnacks);
 
-        Set<String> subCategories = recommendations.stream()
-                .map(SnackRecommendationDTO::getSubCategory)
-                .collect(Collectors.toSet());
-
-        return new SnackRecommendationResponseDTO(recommendations, subCategories);
+        return new SnackRecommendationResponseDTO(recommendations);
     }
 
     private List<String> recommendCategories(SnackRequestDTO requestDto) throws IOException {
@@ -114,6 +110,7 @@ public class RecommendationService {
                 "\n    \"manufacturer\": \"제품 제조사명\"," +
                 "\n    \"snackCategory\": \"간식 분류\"," +
                 "\n    \"allergyInfo\": \"제품에 포함된 주요 알레르기 유발 물질 (DB에 정보가 없으니 영양성분, 이름 등을 보고 판단)\"" +
+                "\n    \"imageUrl\": \"db에 저장된 이미지 url\"," +
                 "\n  }" +
                 "\n]";
     }

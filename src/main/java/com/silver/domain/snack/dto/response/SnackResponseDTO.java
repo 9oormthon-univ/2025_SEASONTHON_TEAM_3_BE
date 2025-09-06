@@ -13,24 +13,19 @@ public class SnackResponseDTO {
 
     private final Long id;
     private final String name;
-    private final String category;
-    private final String subCategory;
     private final String manufacturer;
     private final String snackCategory;
-    private final String servingSize;
-
     private final Set<String> hashtags;
+    private final String imageUrl;
 
     public static SnackResponseDTO from(Snack snack, Set<String> hashtags) {
         return SnackResponseDTO.builder()
                 .id(snack.getId())
                 .name(snack.getName())
-                .category(snack.getCategory())
-                .subCategory(snack.getSubCategory())
                 .manufacturer(snack.getManufacturer())
                 .snackCategory(snack.getSnackCategory())
-                .servingSize(snack.getServingSize())
                 .hashtags(hashtags)
+                .imageUrl(snack.getImageUrl())
                 .build();
     }
 }

@@ -9,11 +9,13 @@ services:
     env_file:
       - .env
     volumes:
+      # EC2 호스트 경로 -> 컨테이너 내부 경로
       - /home/ubuntu/service-account-key.json:/app/service-account-key.json
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      # 컨테이너 내부 경로 기준
       GOOGLE_APPLICATION_CREDENTIALS: /app/service-account-key.json
     depends_on:
       mysql:
@@ -39,3 +41,4 @@ services:
 
 networks:
   silver:
+    driver: bridge
