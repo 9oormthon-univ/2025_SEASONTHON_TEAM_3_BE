@@ -17,6 +17,7 @@ public class SnackDetailResponseDTO {
     private String name;
     private String category;
     private String subCategory;
+    private String snackCategory;
     private String manufacturer;
     private String foodWeight;
     private String servingSize;
@@ -46,6 +47,7 @@ public class SnackDetailResponseDTO {
                 .name(snack.getName())
                 .category(snack.getCategory())
                 .subCategory(snack.getSubCategory())
+                .snackCategory(snack.getSnackCategory())
                 .manufacturer(snack.getManufacturer())
                 .foodWeight(snack.getFoodWeight())
                 .servingSize(snack.getServingSize())

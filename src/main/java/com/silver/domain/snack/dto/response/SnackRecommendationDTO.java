@@ -12,7 +12,8 @@ public class SnackRecommendationDTO {
     private String name;
     private String reason;
     private String category;
-    private String subCategory;  // 식품소분류명 필드 추가
-    private String manufacturer; // 제조사명 필드 추가
+    private String subCategory;
+    private String manufacturer;
+    private String snackCategory;
     private String allergyInfo;
 }
