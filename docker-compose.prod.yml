@@ -1,1 +1,41 @@
-#version: '3.8'
+version: '3.8'
+
+services:
+  application:
+    container_name: backend
+    image: kimhongseok/springboot-silver:latest
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - /home/ubuntu/service-account-key.json:/app/service-account-key.json
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      GOOGLE_APPLICATION_CREDENTIALS: /app/service-account-key.json
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - silver
+
+  mysql:
+    container_name: mysql_silver
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - silver
+
+networks:
+  silver:
