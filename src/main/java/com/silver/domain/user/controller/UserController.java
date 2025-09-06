@@ -3,6 +3,7 @@ package com.silver.domain.user.controller;
 
 import com.silver.domain.user.dto.request.LoginRequestDto;
 import com.silver.domain.user.dto.request.SignUpRequestDto;
+import com.silver.domain.user.dto.request.UpdateProfileRequestDto;
 import com.silver.domain.user.dto.response.TokenResponseDto;
 import com.silver.domain.user.dto.response.UserInfoResponseDto;
 import com.silver.domain.user.service.UserService;
@@ -62,6 +63,17 @@ public class UserController {
         String imageUrl = s3Service.uploadFile(folder, imageFile);
 
         return ResponseEntity.ok(CustomApiResponse.onSuccess(imageUrl));
+    }
+
+    @Operation(summary = "프로필 수정", description = "이름/이메일/알러지/목적을 부분 수정합니다. null/미포함 필드는 수정하지 않습니다.")
+    @PatchMapping("/profile")
+    public ResponseEntity<CustomApiResponse<String>> updateProfile(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestBody UpdateProfileRequestDto request
+    ) {
+        Long userId = customUserDetails.getId();
+        userService.updateProfile(userId, request);
+        return ResponseEntity.ok(CustomApiResponse.onSuccess("프로필이 업데이트되었습니다."));
     }
 
 }

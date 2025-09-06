@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Builder
 @NoArgsConstructor
@@ -13,10 +14,9 @@ import java.time.LocalDateTime;
 @Getter
 
 public class UserInfoResponseDto {
-
     private String username;
     private String email;
-    private String purpose;
-    private String allergy;
+    private Set<String> allergies;
+    private Set<String> purposes;
     private LocalDateTime createdAt;
 }

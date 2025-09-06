@@ -1,4 +1,4 @@
-package com.silver.domain.user.entity;
+package com.silver.domain.snack.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Builder
-public class Allergy {
+public class Hashtag {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String code;
+
     private String name;
 }
