@@ -85,6 +85,7 @@ public class Snack {
     @Column(name = "trans_fat_g")
     private Double transFatG;        // 트랜스지방산 (g)
 
+    private String imageUrl;
 
     @Builder
     public Snack(String foodCode, String name, String category, String subCategory, String snackCategory, String manufacturer,

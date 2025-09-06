@@ -11,9 +11,8 @@ public class SnackRecommendationDTO {
     private Long id;
     private String name;
     private String reason;
-    private String category;
-    private String subCategory;
     private String manufacturer;
     private String snackCategory;
     private String allergyInfo;
+    private String imageUrl;
 }
