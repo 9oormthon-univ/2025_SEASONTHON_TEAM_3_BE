@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collections;
 
@@ -26,17 +27,16 @@ public class VertexAiConfig {
     @Value("${gemini.key-file}")
     private String keyFileName;
 
-    // VertexAI 객체를 생성할 때 서비스 계정 키 파일을 사용하도록 수정합니다.
     @Bean(destroyMethod = "close")
     public VertexAI vertexAI() throws IOException {
-        // resources 폴더에서 서비스 계정 키 파일을 읽어옵니다.
-        ClassPathResource resource = new ClassPathResource(keyFileName);
+        String keyFilePath = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
+        if (keyFilePath == null) {
+            throw new IllegalStateException("GOOGLE_APPLICATION_CREDENTIALS 환경변수가 설정되지 않았습니다.");
+        }
 
-        // 읽어온 파일로 GoogleCredentials 객체를 생성합니다.
-        GoogleCredentials credentials = GoogleCredentials.fromStream(resource.getInputStream())
+        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(keyFilePath))
                 .createScoped(Collections.singletonList("https://www.googleapis.com/auth/cloud-platform"));
 
-        // 생성된 인증 정보를 사용하여 VertexAI 객체를 초기화합니다.
         return new VertexAI(projectId, location);
     }
 
