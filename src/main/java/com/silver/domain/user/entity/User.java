@@ -27,12 +27,6 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Purpose purpose;
-
-    @Enumerated(EnumType.STRING)
-    private  Allergy allergy;
-
-    @Enumerated(EnumType.STRING)
     private Role role;
 
     private LocalDateTime createdAt;

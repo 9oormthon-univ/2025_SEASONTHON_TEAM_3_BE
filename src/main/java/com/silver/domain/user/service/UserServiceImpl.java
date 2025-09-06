@@ -4,11 +4,8 @@ import com.silver.domain.user.dto.request.LoginRequestDto;
 import com.silver.domain.user.dto.request.SignUpRequestDto;
 import com.silver.domain.user.dto.response.TokenResponseDto;
 import com.silver.domain.user.dto.response.UserInfoResponseDto;
-import com.silver.domain.user.entity.Allergy;
-import com.silver.domain.user.entity.Purpose;
-import com.silver.domain.user.entity.Role;
-import com.silver.domain.user.entity.User;
-import com.silver.domain.user.repository.UserRepository;
+import com.silver.domain.user.entity.*;
+import com.silver.domain.user.repository.*;
 import com.silver.global.config.lwt.JwtToken;
 import com.silver.global.config.lwt.JwtUtill;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +14,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class UserServiceImpl implements UserService {
-    
+
     private final UserRepository userRepository;
+    private final AllergyRepository allergyRepository;
+    private final PurposeRepository purposeRepository;
+    private final UserAllergyRepository userAllergyRepository;
+    private final UserPurposeRepository userPurposeRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtill jwtUtil;
 
@@ -40,11 +43,41 @@ public class UserServiceImpl implements UserService {
                 .username(signUpRequestDto.getName())
                 .role(Role.ROLE_USER)
                 .createdAt(LocalDateTime.now())
-                .allergy(Allergy.valueOf(signUpRequestDto.getAllergy().toUpperCase()))
-                .purpose(Purpose.valueOf(signUpRequestDto.getPurpose().toUpperCase()))
-                .build();
+               .build();
 
         userRepository.save(user);
+
+
+        if (signUpRequestDto.getAllergies() != null) {
+            for (String code : signUpRequestDto.getAllergies()) {
+                Allergy allergy = allergyRepository.findByCode(code)
+                        .orElseThrow(() -> new IllegalArgumentException("Unknown allergy code: " + code));
+                if (!userAllergyRepository.existsByUserIdAndAllergyId(user.getId(), allergy.getId())) {
+                    userAllergyRepository.save(
+                            UserAllergy.builder()
+                                    .user(user)
+                                    .allergy(allergy)
+                                    .build()
+                    );
+                }
+            }
+        }
+
+        if (signUpRequestDto.getPurposes() != null) {
+            for (String code : signUpRequestDto.getPurposes()) {
+                Purpose purpose = purposeRepository.findByCode(code)
+                        .orElseThrow(() -> new IllegalArgumentException("Unknown purpose code: " + code));
+                if (!userPurposeRepository.existsByUserIdAndPurposeId(user.getId(), purpose.getId())) {
+                    userPurposeRepository.save(
+                            UserPurpose.builder()
+                                    .user(user)
+                                    .purpose(purpose)
+                                    .build()
+                    );
+                }
+            }
+        }
+
     }
 
     @Override
@@ -69,11 +102,19 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
+        Set<String> allergyNames = userAllergyRepository.findAllByUserId(userId).stream()
+                .map(ua -> ua.getAllergy().getName())
+                .collect(Collectors.toSet());
+
+        Set<String> purposeNames = userPurposeRepository.findAllByUserId(userId).stream()
+                .map(up -> up.getPurpose().getName())
+                .collect(Collectors.toSet());
+
         return UserInfoResponseDto.builder()
                 .username(user.getUsername())
                 .email(user.getEmail())
-                .allergy(user.getAllergy().name())
-                .purpose(user.getPurpose().name())
+                .allergies(allergyNames)
+                .purposes(purposeNames)
                 .build();
     }
 }
