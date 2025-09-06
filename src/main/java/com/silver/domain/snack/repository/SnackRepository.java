@@ -11,6 +11,16 @@ import java.util.Optional;
 
 public interface SnackRepository extends JpaRepository<Snack, Long> {
 
+
+    // DB에 있는 모든 고유한 snackCategory 목록을 조회합니다. (null 이거나 비어있지 않은 값만)
+    @Query("SELECT DISTINCT s.snackCategory FROM Snack s WHERE s.snackCategory IS NOT NULL AND s.snackCategory <> ''")
+    List<String> findDistinctSnackCategories();
+
+    // --- 여러 카테고리로 간식 리스트를 찾는 메서드 추가 ---
+    List<Snack> findBySnackCategoryIn(List<String> snackCategories);
+
+
+
     // --- 새로운 통합 검색 메서드 추가 ---
     @Query("SELECT s FROM Snack s " +
             "LEFT JOIN SnackHashtag sh ON s.id = sh.snack.id " +
@@ -37,4 +47,5 @@ public interface SnackRepository extends JpaRepository<Snack, Long> {
     @Query("SELECT DISTINCT s.category FROM Snack s")
     List<String> findDistinctCategories();
     Optional<Snack> findByName(String name);
+    List<Snack> findBySnackCategory(String snackCategory);
 }
