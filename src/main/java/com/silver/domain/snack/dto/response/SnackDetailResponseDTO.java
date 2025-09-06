@@ -15,12 +15,11 @@ public class SnackDetailResponseDTO {
     // 기본 정보
     private String foodCode;
     private String name;
-    private String category;
-    private String subCategory;
     private String snackCategory;
     private String manufacturer;
     private String foodWeight;
     private String servingSize;
+    private String imageUrl;
 
     // 핵심 영양성분
     private Double energyKcal;
@@ -45,12 +44,11 @@ public class SnackDetailResponseDTO {
         return SnackDetailResponseDTO.builder()
                 .foodCode(snack.getFoodCode())
                 .name(snack.getName())
-                .category(snack.getCategory())
-                .subCategory(snack.getSubCategory())
                 .snackCategory(snack.getSnackCategory())
                 .manufacturer(snack.getManufacturer())
                 .foodWeight(snack.getFoodWeight())
                 .servingSize(snack.getServingSize())
+                .imageUrl(snack.getImageUrl())
                 .energyKcal(snack.getEnergyKcal())
                 .proteinG(snack.getProteinG())
                 .fatG(snack.getFatG())
