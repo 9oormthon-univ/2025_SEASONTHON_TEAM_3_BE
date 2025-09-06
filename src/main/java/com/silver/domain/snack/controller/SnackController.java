@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/snacks")
 @RequiredArgsConstructor
@@ -23,8 +25,10 @@ public class SnackController {
     public ResponseEntity<CustomApiResponse<Page<SnackResponseDTO>>> getAllSnacks(
             Pageable pageable,
             @RequestParam(required = false, name = "keyword") String keyword,
-            @RequestParam(required = false, name = "category") String category) {
-        Page<SnackResponseDTO> snackPage = snackService.getAllSnacks(pageable, keyword, category);
+            @RequestParam(required = false, name = "category") String category,
+            // 여러 개의 해시태그를 받을 수 있도록 파라미터 추가
+            @RequestParam(required = false, name = "hashtags") List<String> hashtags) {
+        Page<SnackResponseDTO> snackPage = snackService.getAllSnacks(pageable, keyword, category, hashtags);
         return ResponseEntity.ok(CustomApiResponse.onSuccess(snackPage));
     }
 
