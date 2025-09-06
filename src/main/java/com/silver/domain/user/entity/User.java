@@ -26,6 +26,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(length = 100)
+    private String allergy;
+
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
