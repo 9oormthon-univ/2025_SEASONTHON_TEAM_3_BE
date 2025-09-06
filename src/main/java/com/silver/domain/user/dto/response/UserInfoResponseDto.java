@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,4 +16,7 @@ public class UserInfoResponseDto {
 
     private String username;
     private String email;
+    private String purpose;
+    private String allergy;
+    private LocalDateTime createdAt;
 }
