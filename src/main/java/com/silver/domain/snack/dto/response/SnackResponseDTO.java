@@ -4,6 +4,9 @@ import com.silver.domain.snack.entity.Snack;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Getter
 @Builder
 public class SnackResponseDTO {
@@ -15,7 +18,9 @@ public class SnackResponseDTO {
     private final String manufacturer;
     private final String servingSize;
 
-    public static SnackResponseDTO from(Snack snack) {
+    private final Set<String> hashtags;
+
+    public static SnackResponseDTO from(Snack snack, Set<String> hashtags) {
         return SnackResponseDTO.builder()
                 .id(snack.getId())
                 .name(snack.getName())
@@ -23,6 +28,7 @@ public class SnackResponseDTO {
                 .subCategory(snack.getSubCategory())
                 .manufacturer(snack.getManufacturer())
                 .servingSize(snack.getServingSize())
+                .hashtags(hashtags)
                 .build();
     }
 }
