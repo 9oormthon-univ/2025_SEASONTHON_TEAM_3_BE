@@ -112,6 +112,7 @@ public class RecommendationService {
                 "\n    \"category\": \"간식 대분류명\"," +
                 "\n    \"subCategory\": \"간식 소분류명\"," +
                 "\n    \"manufacturer\": \"제품 제조사명\"," +
+                "\n    \"snackCategory\": \"간식 분류\"," +
                 "\n    \"allergyInfo\": \"제품에 포함된 주요 알레르기 유발 물질 (DB에 정보가 없으니 영양성분, 이름 등을 보고 판단)\"" +
                 "\n  }" +
                 "\n]";

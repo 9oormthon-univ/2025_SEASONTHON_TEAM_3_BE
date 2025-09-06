@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/snacks")
@@ -23,8 +20,11 @@ public class SnackController {
 
     @Operation(summary = "전체 간식 페이징 조회", description = "데이터베이스에 저장된 모든 간식 정보를 페이지 형태로 조회합니다.")
     @GetMapping
-    public ResponseEntity<CustomApiResponse<Page<SnackResponseDTO>>> getAllSnacks(Pageable pageable) {
-        Page<SnackResponseDTO> snackPage = snackService.getAllSnacks(pageable);
+    public ResponseEntity<CustomApiResponse<Page<SnackResponseDTO>>> getAllSnacks(
+            Pageable pageable,
+            @RequestParam(required = false, name = "keyword") String keyword,
+            @RequestParam(required = false, name = "category") String category) {
+        Page<SnackResponseDTO> snackPage = snackService.getAllSnacks(pageable, keyword, category);
         return ResponseEntity.ok(CustomApiResponse.onSuccess(snackPage));
     }
 

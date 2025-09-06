@@ -27,6 +27,9 @@ public class Snack {
     @Column(name = "sub_category", length = 1024)
     private String subCategory;      // 식품소분류명
 
+    @Column(name = "snack_category", length = 512)
+    private String snackCategory;    // 간식 분류
+
     @Column(name = "manufacturer", length = 1024)
     private String manufacturer;     // 제조사명
 
@@ -84,14 +87,15 @@ public class Snack {
 
 
     @Builder
-    public Snack(String foodCode, String name, String category, String subCategory, String manufacturer, String foodWeight,
-                 String servingSize, Double energyKcal, Double proteinG, Double fatG, Double carbohydrateG, Double sugarG,
-                 Double dietaryFiberG, Double calciumMg, Double ironMg, Double potassiumMg, Double sodiumMg, Double vitaminARAEUg,
-                 Double vitaminCMg, Double cholesterolMg, Double saturatedFatG, Double transFatG) {
+    public Snack(String foodCode, String name, String category, String subCategory, String snackCategory, String manufacturer,
+                 String foodWeight, String servingSize, Double energyKcal, Double proteinG, Double fatG, Double carbohydrateG,
+                 Double sugarG, Double dietaryFiberG, Double calciumMg, Double ironMg, Double potassiumMg, Double sodiumMg,
+                 Double vitaminARAEUg, Double vitaminCMg, Double cholesterolMg, Double saturatedFatG, Double transFatG) {
         this.foodCode = foodCode;
         this.name = name;
         this.category = category;
         this.subCategory = subCategory;
+        this.snackCategory = snackCategory;
         this.manufacturer = manufacturer;
         this.foodWeight = foodWeight;
         this.servingSize = servingSize;

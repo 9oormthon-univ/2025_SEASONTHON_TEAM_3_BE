@@ -16,6 +16,7 @@ public class SnackResponseDTO {
     private final String category;
     private final String subCategory;
     private final String manufacturer;
+    private final String snackCategory;
     private final String servingSize;
 
     private final Set<String> hashtags;
@@ -27,6 +28,7 @@ public class SnackResponseDTO {
                 .category(snack.getCategory())
                 .subCategory(snack.getSubCategory())
                 .manufacturer(snack.getManufacturer())
+                .snackCategory(snack.getSnackCategory())
                 .servingSize(snack.getServingSize())
                 .hashtags(hashtags)
                 .build();

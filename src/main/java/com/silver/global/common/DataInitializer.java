@@ -47,12 +47,8 @@ public class DataInitializer implements ApplicationRunner {
 
                 String foodCode = getVal(values, headers.indexOf("식품코드"));
                 String name = getVal(values, headers.indexOf("식품명"));
-                String sourceOriginCode = getVal(values, headers.indexOf("식품기원코드"));
-                String sourceOriginName = getVal(values, headers.indexOf("식품기원명"));
                 String category = getVal(values, headers.indexOf("식품대분류명"));
-                String foodMiddleCategory = getVal(values, headers.indexOf("식품중분류명"));
                 String subCategory = getVal(values, headers.indexOf("식품소분류명"));
-                String foodDetailCategory = getVal(values, headers.indexOf("식품세분류명"));
                 // '1회 섭취참고량' 컬럼의 인덱스를 올바르게 찾습니다.
                 String referenceServingSize = getVal(values, headers.indexOf("1회 섭취참고량"));
                 Double energyKcal = parseDouble(getVal(values, headers.indexOf("에너지(kcal)")));
@@ -72,13 +68,7 @@ public class DataInitializer implements ApplicationRunner {
                 Double transFatG = parseDouble(getVal(values, headers.indexOf("트랜스지방산(g)")));
                 String foodWeight = getVal(values, headers.indexOf("식품중량"));
                 String manufacturer = getVal(values, headers.indexOf("제조사명"));
-                String importer = getVal(values, headers.indexOf("수입업체명"));
-                String distributor = getVal(values, headers.indexOf("유통업체명"));
-                String importedStatus = getVal(values, headers.indexOf("수입여부"));
-                String countryOfOrigin = getVal(values, headers.indexOf("원산지국명"));
-                String dataGenerationDate = getVal(values, headers.indexOf("데이터생성일자"));
-                String dataStandardDate = getVal(values, headers.indexOf("데이터기준일자"));
-                Double suitabilityScore = parseDouble(getVal(values, headers.indexOf("suitability_score")));
+                String snackCategory = getVal(values, headers.indexOf("간식대분류"));
 
                 if (name == null || name.trim().isEmpty()) continue;
 
@@ -105,6 +95,7 @@ public class DataInitializer implements ApplicationRunner {
                         .transFatG(transFatG)
                         .foodWeight(foodWeight)
                         .manufacturer(manufacturer)
+                        .snackCategory(snackCategory)
                         .build();
 
                 snackRepository.save(snack);
