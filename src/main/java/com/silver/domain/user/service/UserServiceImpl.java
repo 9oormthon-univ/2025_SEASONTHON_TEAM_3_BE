@@ -2,6 +2,7 @@ package com.silver.domain.user.service;
 
 import com.silver.domain.user.dto.request.LoginRequestDto;
 import com.silver.domain.user.dto.request.SignUpRequestDto;
+import com.silver.domain.user.dto.request.UpdateProfileRequestDto;
 import com.silver.domain.user.dto.response.TokenResponseDto;
 import com.silver.domain.user.dto.response.UserInfoResponseDto;
 import com.silver.domain.user.entity.*;
@@ -98,6 +99,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserInfoResponseDto getInfo(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
@@ -117,4 +119,84 @@ public class UserServiceImpl implements UserService {
                 .purposes(purposeNames)
                 .build();
     }
+
+    @Override
+    @Transactional
+    public void updateProfile(Long userId, UpdateProfileRequestDto req) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        if (req.getName() != null && !req.getName().isBlank()) {
+            user.setUsername(req.getName().trim());
+        }
+
+        if (req.getEmail() != null && !req.getEmail().isBlank()) {
+            String newEmail = req.getEmail().trim();
+            if (!newEmail.equalsIgnoreCase(user.getEmail())
+                    && userRepository.findByEmail(newEmail).isPresent()) {
+                throw new RuntimeException("이미 사용 중인 이메일입니다.");
+            }
+            user.setEmail(newEmail);
+        }
+
+        if (req.getAllergies() != null) {
+            var currentLinks = userAllergyRepository.findAllByUserId(userId);
+            var currentCodes = currentLinks.stream()
+                    .map(ua -> ua.getAllergy().getCode())
+                    .collect(java.util.stream.Collectors.toSet());
+
+            var requestedCodes = req.getAllergies().stream()
+                    .filter(c -> c != null && !c.isBlank())
+                    .map(String::trim)
+                    .collect(java.util.stream.Collectors.toSet());
+
+            var toRemove = currentLinks.stream()
+                    .filter(ua -> !requestedCodes.contains(ua.getAllergy().getCode()))
+                    .toList();
+            if (!toRemove.isEmpty()) userAllergyRepository.deleteAllInBatch(toRemove);
+
+            var toAddCodes = requestedCodes.stream()
+                    .filter(code -> !currentCodes.contains(code))
+                    .toList();
+            for (String code : toAddCodes) {
+                Allergy allergy = allergyRepository.findByCode(code)
+                        .orElseThrow(() -> new RuntimeException("알 수 없는 알러지 코드: " + code));
+                userAllergyRepository.save(UserAllergy.builder()
+                        .user(user)
+                        .allergy(allergy)
+                        .build());
+            }
+        }
+
+        if (req.getPurposes() != null) {
+            var currentLinks = userPurposeRepository.findAllByUserId(userId);
+            var currentCodes = currentLinks.stream()
+                    .map(up -> up.getPurpose().getCode())
+                    .collect(java.util.stream.Collectors.toSet());
+
+            var requestedCodes = req.getPurposes().stream()
+                    .filter(c -> c != null && !c.isBlank())
+                    .map(String::trim)
+                    .collect(java.util.stream.Collectors.toSet());
+
+            var toRemove = currentLinks.stream()
+                    .filter(up -> !requestedCodes.contains(up.getPurpose().getCode()))
+                    .toList();
+            if (!toRemove.isEmpty()) userPurposeRepository.deleteAllInBatch(toRemove);
+
+            var toAddCodes = requestedCodes.stream()
+                    .filter(code -> !currentCodes.contains(code))
+                    .toList();
+            for (String code : toAddCodes) {
+                Purpose purpose = purposeRepository.findByCode(code)
+                        .orElseThrow(() -> new RuntimeException("알 수 없는 목적 코드: " + code));
+                userPurposeRepository.save(UserPurpose.builder()
+                        .user(user)
+                        .purpose(purpose)
+                        .build());
+            }
+        }
+
+    }
+
 }

@@ -2,6 +2,7 @@ package com.silver.domain.user.service;
 
 import com.silver.domain.user.dto.request.LoginRequestDto;
 import com.silver.domain.user.dto.request.SignUpRequestDto;
+import com.silver.domain.user.dto.request.UpdateProfileRequestDto;
 import com.silver.domain.user.dto.response.TokenResponseDto;
 import com.silver.domain.user.dto.response.UserInfoResponseDto;
 import org.springframework.stereotype.Service;
@@ -13,4 +14,5 @@ public interface UserService {
     TokenResponseDto login(LoginRequestDto loginRequestDto);
 
     UserInfoResponseDto getInfo(Long userId);
+    void updateProfile(Long userId,UpdateProfileRequestDto updateProfileRequestDto);
 }
