@@ -13,7 +13,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -28,6 +28,25 @@ jwt:
   access-token-expire: 86400000  # 24시간 (밀리초)
   refresh-token-expire: 604800000  # 7일 (밀리초)
 
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: us-east-1
+    s3:
+      bucket: ${AWS_S3_BUCKET}
+
+
 springdoc:
   swagger-ui:
     enabled: true
+
+
+gemini:
+  project-id: ${GEMINI_PROJECT_ID}
+  location: ${GEMINI_LOCATION}
+  model: ${GEMINI_MODEL}
+  api-key: ${GEMINI_API_KEY}
+  key-file: ${GEMINI_API_KEY}

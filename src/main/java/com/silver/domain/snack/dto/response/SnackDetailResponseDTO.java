@@ -1,0 +1,70 @@
+package com.silver.domain.snack.dto.response;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.silver.domain.snack.entity.Snack;
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+public class SnackDetailResponseDTO {
+
+    // 기본 정보
+    private String foodCode;
+    private String name;
+    private String category;
+    private String subCategory;
+    private String manufacturer;
+    private String foodWeight;
+    private String servingSize;
+
+    // 핵심 영양성분
+    private Double energyKcal;
+    private Double proteinG;
+    private Double fatG;
+    private Double carbohydrateG;
+    private Double sugarG;
+    private Double dietaryFiberG;
+    private Double calciumMg;
+    private Double ironMg;
+    private Double potassiumMg;
+    private Double sodiumMg;
+    private Double vitaminARAEUg;
+    private Double vitaminCMg;
+    private Double cholesterolMg;
+    private Double saturatedFatG;
+    private Double transFatG;
+
+    // 기타 정보
+    private String sourceOriginCode;
+    private String sourceOriginName;
+    private String foodMiddleCategory;
+    private String foodDetailCategory;
+
+    public static SnackDetailResponseDTO from(Snack snack) {
+        return SnackDetailResponseDTO.builder()
+                .foodCode(snack.getFoodCode())
+                .name(snack.getName())
+                .category(snack.getCategory())
+                .subCategory(snack.getSubCategory())
+                .manufacturer(snack.getManufacturer())
+                .foodWeight(snack.getFoodWeight())
+                .servingSize(snack.getServingSize())
+                .energyKcal(snack.getEnergyKcal())
+                .proteinG(snack.getProteinG())
+                .fatG(snack.getFatG())
+                .carbohydrateG(snack.getCarbohydrateG())
+                .sugarG(snack.getSugarG())
+                .dietaryFiberG(snack.getDietaryFiberG())
+                .calciumMg(snack.getCalciumMg())
+                .ironMg(snack.getIronMg())
+                .potassiumMg(snack.getPotassiumMg())
+                .sodiumMg(snack.getSodiumMg())
+                .vitaminARAEUg(snack.getVitaminARAEUg())
+                .vitaminCMg(snack.getVitaminCMg())
+                .cholesterolMg(snack.getCholesterolMg())
+                .saturatedFatG(snack.getSaturatedFatG())
+                .transFatG(snack.getTransFatG())
+                .build();
+    }
+}

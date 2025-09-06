@@ -4,6 +4,8 @@ import com.silver.domain.user.dto.request.LoginRequestDto;
 import com.silver.domain.user.dto.request.SignUpRequestDto;
 import com.silver.domain.user.dto.response.TokenResponseDto;
 import com.silver.domain.user.dto.response.UserInfoResponseDto;
+import com.silver.domain.user.entity.Allergy;
+import com.silver.domain.user.entity.Purpose;
 import com.silver.domain.user.entity.Role;
 import com.silver.domain.user.entity.User;
 import com.silver.domain.user.repository.UserRepository;
@@ -13,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +39,9 @@ public class UserServiceImpl implements UserService {
                 .password(encodedPassword)
                 .username(signUpRequestDto.getName())
                 .role(Role.ROLE_USER)
+                .createdAt(LocalDateTime.now())
+                .allergy(Allergy.valueOf(signUpRequestDto.getAllergy().toUpperCase()))
+                .purpose(Purpose.valueOf(signUpRequestDto.getPurpose().toUpperCase()))
                 .build();
 
         userRepository.save(user);
@@ -65,6 +72,8 @@ public class UserServiceImpl implements UserService {
         return UserInfoResponseDto.builder()
                 .username(user.getUsername())
                 .email(user.getEmail())
+                .allergy(user.getAllergy().name())
+                .purpose(user.getPurpose().name())
                 .build();
     }
 }
