@@ -5,6 +5,9 @@ import com.silver.domain.snack.entity.Snack;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Getter
 @Builder
 public class SnackDetailResponseDTO {
@@ -35,13 +38,9 @@ public class SnackDetailResponseDTO {
     private Double saturatedFatG;
     private Double transFatG;
 
-    // 기타 정보
-    private String sourceOriginCode;
-    private String sourceOriginName;
-    private String foodMiddleCategory;
-    private String foodDetailCategory;
+    private final Set<String> hashtags;
 
-    public static SnackDetailResponseDTO from(Snack snack) {
+    public static SnackDetailResponseDTO from(Snack snack , Set<String> hashtags) {
         return SnackDetailResponseDTO.builder()
                 .foodCode(snack.getFoodCode())
                 .name(snack.getName())
@@ -65,6 +64,7 @@ public class SnackDetailResponseDTO {
                 .cholesterolMg(snack.getCholesterolMg())
                 .saturatedFatG(snack.getSaturatedFatG())
                 .transFatG(snack.getTransFatG())
+                .hashtags(hashtags)
                 .build();
     }
 }
