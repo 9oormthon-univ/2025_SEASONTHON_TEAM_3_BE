@@ -10,9 +10,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class SnackRequestDTO {
-    private List<String> healthConcerns;
-    private List<String> physicalConditions;
-    private List<String> dietaryRestrictions;
-    private List<String> keywords;
-    private List<String> allergies;
+    // AI 추천에 사용할 간식 카테고리 필드
+    private List<String> snackCategories;
 }
