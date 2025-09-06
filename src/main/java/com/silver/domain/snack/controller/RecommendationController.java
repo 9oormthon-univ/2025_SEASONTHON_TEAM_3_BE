@@ -3,8 +3,10 @@ package com.silver.domain.snack.controller;
 import com.silver.domain.snack.dto.request.SnackRequestDTO;
 import com.silver.domain.snack.dto.response.SnackRecommendationResponseDTO;
 import com.silver.domain.snack.service.RecommendationService;
+import com.silver.domain.user.entity.User;
 import com.silver.global.common.CustomApiResponse;
 import com.silver.global.config.security.CustomUserDetails;
+import com.silver.global.config.security.CustomUserDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,7 +32,7 @@ public class RecommendationController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody SnackRequestDTO requestDto) {
         try {
-            SnackRecommendationResponseDTO recommendations = recommendationService.getSnackRecommendations(requestDto);
+            SnackRecommendationResponseDTO recommendations = recommendationService.getSnackRecommendations(customUserDetails, requestDto);
             return ResponseEntity.status(HttpStatus.OK).body(CustomApiResponse.onSuccess(recommendations));
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(CustomApiResponse.onFailure(e.getMessage(), "GEMINI_API_ERROR"));
