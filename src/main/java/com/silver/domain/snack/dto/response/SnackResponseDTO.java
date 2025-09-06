@@ -13,6 +13,7 @@ public class SnackResponseDTO {
     private final String category;
     private final String subCategory;
     private final String manufacturer;
+    private final String snackCategory;
     private final String servingSize;
 
     public static SnackResponseDTO from(Snack snack) {
@@ -22,6 +23,7 @@ public class SnackResponseDTO {
                 .category(snack.getCategory())
                 .subCategory(snack.getSubCategory())
                 .manufacturer(snack.getManufacturer())
+                .snackCategory(snack.getSnackCategory())
                 .servingSize(snack.getServingSize())
                 .build();
     }
